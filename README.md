@@ -2,18 +2,17 @@
 
 Brand assets and staging tooling for [Karasu Kai](https://www.karasukai.com.au).
 
-## Yatagarasu crow mark (revised)
+## Yatagarasu crow mark
 
-Slight brand inclusion exploring a **three-legged crow** for the empty crow slot on the main site.
+Photoreal **three-legged crow** for the empty crow slot on the main site.
 
-The first geometric pass was weak. Revised directions:
-
-| Asset | Direction |
-|-------|-----------|
-| `brand/assets/mark-profile.png` | **A** — side profile, hunched crow |
-| `brand/assets/mark-mon.png` | **B** — circular mon / crest |
-| `brand/assets/yatagarasu.svg` | Vector draft of profile |
-| `brand/index.html` | Interactive comparison preview |
+| Asset | Use |
+|-------|-----|
+| `brand/assets/yatagarasu-real.png` | Full master |
+| `brand/assets/yatagarasu-real-1024.png` | Web / hero |
+| `brand/assets/yatagarasu-real-512.png` | Crow slot / nav |
+| `brand/index.html` | Preview with wordmark |
+| `brand/snippet.html` | Drop-in markup |
 
 ### Preview
 
@@ -22,4 +21,4 @@ cd brand && python3 -m http.server 8080
 # open http://localhost:8080
 ```
 
-System tokens unchanged: Syne + DM Mono, `#0d0d0d`, accent `#c8102e`.
+Spec: realistic crow, three legs, red eye (`#c8102e`), black field (`#0d0d0d`).
