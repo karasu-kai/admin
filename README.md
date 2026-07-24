@@ -2,9 +2,18 @@
 
 Brand assets and staging tooling for [Karasu Kai](https://www.karasukai.com.au).
 
-## Yatagarasu crow mark
+## Yatagarasu crow mark (revised)
 
-Slight brand inclusion exploring a **three-legged crow** (yatagarasu / 八咫烏) for the empty crow slot on the main site.
+Slight brand inclusion exploring a **three-legged crow** for the empty crow slot on the main site.
+
+The first geometric pass was weak. Revised directions:
+
+| Asset | Direction |
+|-------|-----------|
+| `brand/assets/mark-profile.png` | **A** — side profile, hunched crow |
+| `brand/assets/mark-mon.png` | **B** — circular mon / crest |
+| `brand/assets/yatagarasu.svg` | Vector draft of profile |
+| `brand/index.html` | Interactive comparison preview |
 
 ### Preview
 
@@ -13,14 +22,4 @@ cd brand && python3 -m http.server 8080
 # open http://localhost:8080
 ```
 
-### Assets
-
-| File | Use |
-|------|-----|
-| `brand/assets/yatagarasu.svg` | Primary — white + red eye on dark |
-| `brand/assets/yatagarasu-mono.svg` | `currentColor` for tinting |
-| `brand/assets/yatagarasu-line.svg` | Stroke / favicon-adjacent |
-| `brand/index.html` | Full inclusion review |
-| `brand/snippet.html` | Drop-in markup for `.l-crow-slot` |
-
-System tokens unchanged: Syne + DM Mono, `#0d0d0d` field, accent `#c8102e`.
+System tokens unchanged: Syne + DM Mono, `#0d0d0d`, accent `#c8102e`.
