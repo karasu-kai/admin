@@ -1,0 +1,55 @@
+customer,code,qty,unit,status,notes
+Simone De la V,MS40,20,vials,shipped,listed as -20 vials Ms40; SHIPPED note on row
+Simone De la V,RT10,30,vials,shipped,crossed out / SHIPPED 23/07/26
+Naji Sassine,RT10,10,vials,order,10x rt10
+Naji Sassine,GHK serum,20,units,order,20x GHK serum
+Cale,BPC-157 + TB500,1,box,order,1) BPC-157 + TB500 10mg+10mg; prior line crossed out
+Dimitri,RT20,1,box,shipped,RT20 shipped 23/07/26
+Daniel Locke,BB10,1,units,order,BB10 (pink highlight; may be done)
+James Stevens,CP10,10,vials,order,10x CP10
+Deus Vult,RT10,10,vials,order,10x RT10
+Shosti Haq,RT10,20,vials,order,20x RT10
+Rosie,Bac water,1,units,order,Bac water; date 18 Nov 2025
+Nay,SLUPP-332,2,kits,order,2×Slupp-332 kits
+Nay,BPC-157 20mg,1,box,order,1 box (10 vials); Order Value shows 2 — may mean 2 boxes
+Kate Kiewet,RT10,20,vials,order,20x RT10
+Alex mcmahon,RT10,1,units,ambiguous,"Rt10 $550 — price note, qty assumed 1"
+Alex mcmahon,CP10,1,units,ambiguous,"Cp10 $550 — price note, qty assumed 1"
+Josh Westerberg,Glow,1,units,order,Glow CP10 rt20 ms40
+Josh Westerberg,CP10,1,units,order,from Glow CP10 rt20 ms40
+Josh Westerberg,RT20,1,units,order,from Glow CP10 rt20 ms40
+Josh Westerberg,MS40,1,units,order,from Glow CP10 rt20 ms40
+Tara Canin,—,0,,note,Updated list to fulfill
+Darren Parrera,RT10,10,vials,order,10xrt10
+Darren Parrera,SLUPP-332,10,units,order,10slupp
+Jamie Eid,RT10,20,vials,order,20x RT10
+Dani Gale,MOTS10,10,vials,order,10x MOTS10
+Dani Gale,Reta,1,box,order,1 box Reta
+Dani Gale,GHCKU,1,box,order,1 box ghcku
+Dani Gale,NAD+ nasal spray,1,units,order,1 nad+ nasal spray
+Dani Gale,Reusable pen,1,units,order,1 reusable pen
+Dani Gale,GHCKU serum,1,units,order,1 ghcku serum
+Troy Baker,RT10,1,box,order,1 box rt10 (=10 vials if box=10)
+Ben Thompson,RT36,5,vials,order,5x RT36
+Jamie Garis,Humanin,1,units,order,Humanin
+Megan Carrabott,—,0,,refund,$2100.00 REFUND
+Vito Trentadue,—,0,,note,ZACH PAPAS (name in order cell)
+Matt Ward,RT20,1,units,order,RT20
+Michelle Keane,RT10,1,vials,order,rt10
+Meghan Durie,—,0,,refund,REFUND $450??
+Aron Lav,—,0,,refund,REFUND $1150
+Kieran McAlister,CU50,0.5,units,order,1/2cu50
+Isla michado,Tirz 10,5,vials,shipped,5x Tirz 10 SHIPPED 23/07/26
+Isla michado,Bac water,1,units,order,BAC on row under Tirz
+alex hogan,RT10,10,vials,order,10x rt10
+Josh Dahl,RT10,8,vials,order,8rt10 vials
+Simon qbcc,RT10,10,vials,order,10x rt10 bac
+Simon qbcc,Bac water,1,units,order,bac noted with rt10
+Dan nunn,H15,1,units,order,H15 x1
+Dan nunn,MS40,1,units,order,MS40 x1
+Dan nunn,RT10,1,vials,order,RT10 x1
+MARK ROBINSON,Semax,50,units,order,NASALS
+MARK ROBINSON,Selank,30,units,order,NASALS
+MARK ROBINSON,DSIP,20,units,order,NASALS
+MARK ROBINSON,NAD+,20,units,order,NASALS
+MARK ROBINSON,Oxy,20,units,order,NASALS
