@@ -158,6 +158,8 @@ export function productPath(product: Product): string {
   return product.category === 'merch' ? `/merch#${product.id}` : `/shop#${product.id}`
 }
 
+const SHOPIFY_STORE = 'https://shop.kodoco.com.au'
+
 export function shopifyUrl(product: Product): string {
-  return `https://kodoco.com.au/products/${product.id}`
+  return `${SHOPIFY_STORE}/products/${product.id}`
 }
