@@ -4,46 +4,28 @@ Immersive, minimal website for [kodoco.com.au](https://kodoco.com.au) — copper
 
 ---
 
-## Put it live on Hostinger (no coding)
+## Auto-deploy (recommended)
 
-### Step 1 — Upload the site
+Set up once — never upload manually again. See **`SETUP-AUTO-DEPLOY.md`**.
 
-1. Log in to **Hostinger** → **Websites** → your domain → **File Manager**
-2. Open the **`public_html`** folder (delete old files in there if you’re replacing the site)
-3. Upload **everything inside the `deploy/` folder** in this repo — not the folder itself, the files inside it:
-   - `index.html`
-   - `favicon.svg`
-   - `.htaccess`
-   - the `assets/` folder
-
-That’s it. Visit your domain — the site should load.
-
-> The `deploy/` folder is a ready-to-upload build. You don’t need to run any commands.
-
-### Step 2 — Point your domain (if needed)
-
-If the domain isn’t already pointed at Hostinger, set nameservers in your domain registrar to Hostinger’s (shown in hPanel).
-
-### Step 3 — Shopify checkout links
-
-“Add to Bag” buttons link to your Shopify store. When products are set up, update URLs in:
-
-`src/data/products.ts` → `shopifyUrl` function
-
-Then ask a dev to run `npm run hostinger` and re-upload the `deploy/` folder.
+Push to GitHub → site updates on Hostinger automatically.
 
 ---
 
-## Updating the site later
+## Manual upload (backup option)
 
-If you change copy, products, or photos in the source code:
+If auto-deploy isn't set up yet:
 
-```bash
-npm install
-npm run hostinger
-```
+1. Log in to **Hostinger** → **File Manager** → **`public_html`**
+2. Upload **everything inside the `deploy/` folder**
 
-Re-upload the contents of `deploy/` to Hostinger `public_html`.
+---
+
+## Updating the site
+
+**With auto-deploy:** push to GitHub. Done.
+
+**Manual:** run `npm run hostinger` then re-upload `deploy/`.
 
 ---
 
