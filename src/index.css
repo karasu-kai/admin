@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@theme {
+  --color-kodo-black: #0a0a0a;
+  --color-kodo-charcoal: #141414;
+  --color-kodo-stone: #1c1c1c;
+  --color-kodo-silver: #8a8a8a;
+  --color-kodo-white: #f5f5f5;
+  --color-kodo-accent: #c0c0c0;
+  --font-display: "Syne", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--color-kodo-black);
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--color-kodo-black);
+  color: var(--color-kodo-white);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.grain {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
