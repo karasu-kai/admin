@@ -1,0 +1,43 @@
+name: Push project to kodoco repo
+
+# One-time: pushes the full KODO CO project to karasu-kai/kodoco main.
+# After this runs, work only in the kodoco repo.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require KODOCO_PAT
+        env:
+          KODOCO_PAT: ${{ secrets.KODOCO_PAT }}
+        run: |
+          if [ -z "$KODOCO_PAT" ]; then
+            echo "::error::KODOCO_PAT secret is not set."
+            echo ""
+            echo "1. https://github.com/settings/tokens → Generate new token (classic) → tick repo"
+            echo "2. https://github.com/karasu-kai/admin/settings/secrets/actions → New secret → KODOCO_PAT"
+            echo "3. Re-run this workflow"
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+        with:
+          ref: kodoco
+          repository: karasu-kai/admin
+
+      - name: Push full project to kodoco repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote add kodoco "https://x-access-token:${KODOCO_PAT}@github.com/karasu-kai/kodoco.git"
+          git push -f kodoco HEAD:main
+
+      - name: Done
+        run: |
+          echo "Done — full project pushed to karasu-kai/kodoco main."
+          echo ""
+          echo "Next: open kodoco repo → Actions → Deploy site → Run workflow"
+          echo "Hostinger Git: kodoco repo, branch live, path public_html"
