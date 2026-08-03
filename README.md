@@ -2,68 +2,57 @@
 
 Immersive, minimal website for **kodoco.com.au** — copper peptide skincare + black-on-black merch.
 
-Payments via **Stripe Payment Links** (no Shopify). Auto-deploys to Hostinger on push.
+---
+
+## Repo layout
+
+| Repo | Branch | What's in it |
+|------|--------|----------------|
+| **`karasu-kai/admin`** | `kodoco` | Source code (edit here) |
+| **`karasu-kai/admin`** | `hostinger` | Built site files (ready to deploy) |
+| **`karasu-kai/kodoco`** | `hostinger` | Copy of built site → Hostinger pulls this |
+
+**`admin` is the dev repo. `kodoco` is the live deploy repo.**
 
 ---
 
-## Move to new repo (one-time)
+## Current status
 
-### 1. Create the repo on GitHub
-
-1. Go to **https://github.com/new**
-2. Owner: **karasu-kai**
-3. Name: **`kodoco`**
-4. **Public**
-5. Leave empty — no README, no .gitignore
-6. Click **Create repository**
-
-### 2. Push this code to it
-
-```bash
-git remote set-url origin https://github.com/karasu-kai/kodoco.git
-git push -u origin main
-```
-
-### 3. Re-add FTP secrets on the new repo
-
-Go to **https://github.com/karasu-kai/kodoco/settings/secrets/actions**
-
-Add the same 3 secrets: `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD`
-
-### 4. Done
-
-Code lives at **https://github.com/karasu-kai/kodoco**
-
-Push to `main` → site auto-deploys to Hostinger.
+- **DNS** → Hostinger ✅
+- **Site files on Hostinger** → ❌ still default placeholder page
+- **Fix** → upload `hostinger` branch files to `kodoco` repo, then deploy in Hostinger Git
 
 ---
 
-## Auto-deploy
+## Go live (Hostinger Git)
 
-See **`SETUP-AUTO-DEPLOY.md`**
+1. Upload site files to **https://github.com/karasu-kai/kodoco** (branch: `hostinger`)
+   - Download from: **https://github.com/karasu-kai/admin/tree/hostinger**
+   - Files: `index.html`, `.htaccess`, `favicon.svg`, `icons.svg`, `assets/`
+
+2. Hostinger hPanel → **Git**
+   - Repo: `https://github.com/karasu-kai/kodoco.git`
+   - Branch: **`hostinger`**
+   - Path: **`public_html`**
+   - Click **Deploy**
+
+---
+
+## Edit the site
+
+1. Edit source on `admin` repo, branch `kodoco`
+2. Push → GitHub Actions rebuilds `hostinger` branch automatically
+3. Copy/sync to `kodoco` repo → Hostinger redeploys
 
 ---
 
 ## Payments
 
-See **`SETUP-PAYMENTS.md`** — Stripe Payment Links, one per product.
+Stripe Payment Links — see **`SETUP-PAYMENTS.md`**
 
 ---
 
-## What's in the site
-
-| Page | URL |
-|------|-----|
-| Homepage | `/` |
-| Skincare | `/shop` |
-| Merch | `/merch` |
-
-**Skincare:** GHK-Cu Serum, Cream, HA Mist, Renewal Mask  
-**Merch:** Travel Bag, Logo Tee, Hoodie, Cap, Canvas Tote
-
----
-
-## Local preview (optional)
+## Local preview
 
 ```bash
 npm install
@@ -71,3 +60,13 @@ npm run dev
 ```
 
 Open http://localhost:5173
+
+---
+
+## Pages
+
+| Page | URL |
+|------|-----|
+| Homepage | `/` |
+| Skincare | `/shop` |
+| Merch | `/merch` |

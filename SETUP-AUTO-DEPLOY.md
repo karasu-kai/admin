@@ -1,49 +1,51 @@
-# Auto-deploy to Hostinger
+# Auto-deploy
 
-Push code → site updates automatically. No more manual uploads.
+Push to **`admin`** repo, branch **`kodoco`** → GitHub Actions rebuilds branch **`hostinger`**.
+
+Then sync **`hostinger`** → **`kodoco`** repo for Hostinger to pull.
 
 ---
 
-## One-time setup (10 mins)
+## GitHub Actions (admin repo)
 
-### 1. Get FTP details from Hostinger
+Runs on push to `kodoco` branch:
+1. Builds the site
+2. Updates `hostinger` branch on **admin** repo
 
-1. Hostinger hPanel → **Files** → **FTP Accounts**
-2. Note down:
-   - **FTP host** (e.g. `ftp.kodoco.com.au`)
-   - **Username**
-   - **Password**
+Check: https://github.com/karasu-kai/admin/actions
 
-### 2. Add secrets to GitHub
+---
 
-1. Open https://github.com/karasu-kai/kodoco/settings/secrets/actions
-2. Click **New repository secret** for each:
+## Sync to kodoco repo
 
-| Name | Value |
-|------|-------|
-| `FTP_SERVER` | your FTP host |
-| `FTP_USERNAME` | your FTP username |
+After build, push `hostinger` branch to your **kodoco** repo:
+
+```bash
+git clone -b hostinger https://github.com/karasu-kai/admin.git /tmp/sync
+cd /tmp/sync
+git push -f https://github.com/karasu-kai/kodoco.git HEAD:hostinger
+```
+
+Hostinger Git auto-pulls from **kodoco** repo.
+
+---
+
+## Optional: FTP deploy
+
+Add secrets to **admin** repo → Settings → Secrets:
+
+| Secret | Value |
+|--------|-------|
+| `FTP_SERVER` | `ftp.kodoco.com.au` |
+| `FTP_USERNAME` | `u448359330.kodoco` |
 | `FTP_PASSWORD` | your FTP password |
 
-### 3. Push — done
-
-Every time code is pushed to the branch, GitHub builds the site and uploads it to Hostinger automatically.
+FTP deploy runs automatically if secrets are set.
 
 ---
 
-## How you update the site after this
+## Repo secrets for auto-sync to kodoco
 
-1. Change something (or ask Cursor to)
-2. Push to GitHub
-3. Wait ~2 mins
-4. Refresh your site
+Add `KODOCO_PAT` secret (Personal Access Token with repo access) to auto-push to **kodoco** repo on every deploy.
 
-That's it.
-
----
-
-## Check if it worked
-
-GitHub → **Actions** tab → look for a green tick on "Deploy to Hostinger"
-
-Red X = usually wrong FTP password. Double-check secrets.
+Create token: GitHub → Settings → Developer settings → Personal access tokens
