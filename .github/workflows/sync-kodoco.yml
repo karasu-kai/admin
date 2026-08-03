@@ -1,0 +1,52 @@
+name: Sync site to kodoco repo
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Deploy to Hostinger"]
+    types: [completed]
+    branches: [kodoco]
+
+jobs:
+  sync:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require KODOCO_PAT secret
+        env:
+          KODOCO_PAT: ${{ secrets.KODOCO_PAT }}
+        run: |
+          if [ -z "$KODOCO_PAT" ]; then
+            echo "::error::KODOCO_PAT secret is missing."
+            echo "Create a GitHub token with repo access and add it as KODOCO_PAT in admin repo secrets."
+            echo "See KODOCO-REPO.md for step-by-step instructions."
+            exit 1
+          fi
+
+      - name: Checkout built site from hostinger branch
+        uses: actions/checkout@v4
+        with:
+          ref: hostinger
+          repository: karasu-kai/admin
+
+      - name: Verify site files (including assets/)
+        run: |
+          echo "=== Site files ==="
+          find . -type f | sort
+          test -f index.html
+          test -f .htaccess
+          test -f favicon.svg
+          test -f icons.svg
+          test -d assets
+          test -n "$(find assets -maxdepth 1 -name 'index-*.css' | head -1)"
+          test -n "$(find assets -maxdepth 1 -name 'index-*.js' | head -1)"
+          echo "All files present including assets folder"
+
+      - name: Push to kodoco repo (hostinger branch)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git push -f "https://x-access-token:${{ secrets.KODOCO_PAT }}@github.com/karasu-kai/kodoco.git" HEAD:hostinger
+
+      - name: Done
+        run: echo "kodoco repo updated — Hostinger Git will auto-deploy if connected."
