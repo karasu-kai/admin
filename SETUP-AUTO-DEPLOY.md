@@ -16,7 +16,7 @@ Push code → site updates automatically. No more manual uploads.
 
 ### 2. Add secrets to GitHub
 
-1. Open https://github.com/karasu-kai/admin/settings/secrets/actions
+1. Open https://github.com/karasu-kai/kodoco/settings/secrets/actions
 2. Click **New repository secret** for each:
 
 | Name | Value |

@@ -2,9 +2,7 @@ name: Deploy to Hostinger
 
 on:
   push:
-    branches:
-      - main
-      - cursor/kodoco-website-rebrand-ce81
+    branches: [main]
 
 jobs:
   deploy:

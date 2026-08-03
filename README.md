@@ -1,31 +1,65 @@
 # KODO CO® Website
 
-Immersive, minimal website for [kodoco.com.au](https://kodoco.com.au) — copper peptide skincare + black-on-black merch.
+Immersive, minimal website for **kodoco.com.au** — copper peptide skincare + black-on-black merch.
+
+Payments via **Stripe Payment Links** (no Shopify). Auto-deploys to Hostinger on push.
 
 ---
 
-## Auto-deploy (recommended)
+## Move to new repo (one-time)
 
-Set up once — never upload manually again. See **`SETUP-AUTO-DEPLOY.md`**.
+### 1. Create the repo on GitHub
 
-Push to GitHub → site updates on Hostinger automatically.
+1. Go to **https://github.com/new**
+2. Owner: **karasu-kai**
+3. Name: **`kodoco`**
+4. **Public**
+5. Leave empty — no README, no .gitignore
+6. Click **Create repository**
+
+### 2. Push this code to it
+
+```bash
+git remote set-url origin https://github.com/karasu-kai/kodoco.git
+git push -u origin main
+```
+
+### 3. Re-add FTP secrets on the new repo
+
+Go to **https://github.com/karasu-kai/kodoco/settings/secrets/actions**
+
+Add the same 3 secrets: `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD`
+
+### 4. Done
+
+Code lives at **https://github.com/karasu-kai/kodoco**
+
+Push to `main` → site auto-deploys to Hostinger.
 
 ---
 
-## Manual upload (backup option)
+## Auto-deploy
 
-If auto-deploy isn't set up yet:
-
-1. Log in to **Hostinger** → **File Manager** → **`public_html`**
-2. Upload **everything inside the `deploy/` folder**
+See **`SETUP-AUTO-DEPLOY.md`**
 
 ---
 
-## Updating the site
+## Payments
 
-**With auto-deploy:** push to GitHub. Done.
+See **`SETUP-PAYMENTS.md`** — Stripe Payment Links, one per product.
 
-**Manual:** run `npm run hostinger` then re-upload `deploy/`.
+---
+
+## What's in the site
+
+| Page | URL |
+|------|-----|
+| Homepage | `/` |
+| Skincare | `/shop` |
+| Merch | `/merch` |
+
+**Skincare:** GHK-Cu Serum, Cream, HA Mist, Renewal Mask  
+**Merch:** Travel Bag, Logo Tee, Hoodie, Cap, Canvas Tote
 
 ---
 
@@ -37,31 +71,3 @@ npm run dev
 ```
 
 Open http://localhost:5173
-
----
-
-## What’s in the site
-
-| Page | URL |
-|------|-----|
-| Homepage | `/` |
-| Skincare | `/shop` |
-| Merch (black on black) | `/merch` |
-
-**Skincare:** GHK-Cu Serum, Cream, HA Mist, Renewal Mask  
-**Merch:** Travel Bag, Logo Tee, Hoodie, Cap, Canvas Tote
-
-**Payments:** Stripe Payment Links (see **`SETUP-PAYMENTS.md`**) — no Shopify needed.
-
----
-
-## New GitHub repo setup
-
-If you’re pushing this to a fresh repo:
-
-```bash
-git remote add origin https://github.com/YOUR-USERNAME/kodoco-website.git
-git push -u origin main
-```
-
-Create the empty repo first at [github.com/new](https://github.com/new) — name it `kodoco-website`.
