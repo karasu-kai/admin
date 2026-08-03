@@ -1,0 +1,26 @@
+name: Sync to kodoco repo
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: hostinger
+          repository: karasu-kai/admin
+
+      - name: Push site files to kodoco/hostinger
+        run: |
+          git push -f "https://x-access-token:${{ secrets.KODOCO_PAT }}@github.com/karasu-kai/kodoco.git" HEAD:hostinger
+
+      - uses: actions/checkout@v4
+        with:
+          ref: kodoco
+          repository: karasu-kai/admin
+
+      - name: Push source code to kodoco/main
+        run: |
+          git push -f "https://x-access-token:${{ secrets.KODOCO_PAT }}@github.com/karasu-kai/kodoco.git" HEAD:main
