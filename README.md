@@ -1,48 +1,24 @@
 # KODO CO® Website
 
-Immersive, minimal website for **kodoco.com.au** — copper peptide skincare + black-on-black merch.
+**Live site:** https://kodoco.com.au
 
 ---
 
-## Repo layout
+## Repos
 
-| Repo | Branch | What's in it |
-|------|--------|----------------|
-| **`karasu-kai/admin`** | `kodoco` | Source code (edit here) |
-| **`karasu-kai/admin`** | `hostinger` | Built site files (ready to deploy) |
-| **`karasu-kai/kodoco`** | `hostinger` | Copy of built site → Hostinger pulls this |
-
-**`admin` is the dev repo. `kodoco` is the live deploy repo.**
+| Repo | Branch | Purpose |
+|------|--------|---------|
+| `karasu-kai/admin` | `kodoco` | Edit source code here |
+| `karasu-kai/admin` | `hostinger` | Built site with **assets/** folder |
+| `karasu-kai/kodoco` | `hostinger` | Hostinger Git pulls from here |
 
 ---
 
-## Current status
+## Git deploy to Hostinger
 
-- **DNS** → Hostinger ✅
-- **Site files on Hostinger** → ❌ still default placeholder page
-- **Fix** → upload `hostinger` branch files to `kodoco` repo, then deploy in Hostinger Git
+See **`KODOCO-REPO.md`** — full setup including assets folder sync.
 
----
-
-## Go live (Hostinger Git)
-
-1. Upload site files to **https://github.com/karasu-kai/kodoco** (branch: `hostinger`)
-   - Download from: **https://github.com/karasu-kai/admin/tree/hostinger**
-   - Files: `index.html`, `.htaccess`, `favicon.svg`, `icons.svg`, `assets/`
-
-2. Hostinger hPanel → **Git**
-   - Repo: `https://github.com/karasu-kai/kodoco.git`
-   - Branch: **`hostinger`**
-   - Path: **`public_html`**
-   - Click **Deploy**
-
----
-
-## Edit the site
-
-1. Edit source on `admin` repo, branch `kodoco`
-2. Push → GitHub Actions rebuilds `hostinger` branch automatically
-3. Copy/sync to `kodoco` repo → Hostinger redeploys
+**Quick fix for missing assets:** run **Sync site to kodoco repo** workflow after adding `KODOCO_PAT` secret.
 
 ---
 
@@ -55,18 +31,7 @@ Stripe Payment Links — see **`SETUP-PAYMENTS.md`**
 ## Local preview
 
 ```bash
-npm install
-npm run dev
+npm install && npm run dev
 ```
 
 Open http://localhost:5173
-
----
-
-## Pages
-
-| Page | URL |
-|------|-----|
-| Homepage | `/` |
-| Skincare | `/shop` |
-| Merch | `/merch` |
