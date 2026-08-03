@@ -20,17 +20,37 @@ jobs:
 
       - run: npm ci
       - run: npm run hostinger
+      - run: bash scripts/verify-deploy.sh deploy
 
-      - name: Publish clean site to hostinger branch
+      - name: Publish built site to admin hostinger branch
         run: |
-          cd deploy
-          git init
-          git checkout -b hostinger
-          git add -A
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git commit -m "Deploy $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" hostinger
+          bash scripts/push-built-site.sh \
+            "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" \
+            hostinger \
+            deploy \
+            "Deploy $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+
+      - name: Sync to kodoco repo
+        id: sync_kodoco
+        env:
+          KODOCO_PAT: ${{ secrets.KODOCO_PAT }}
+        if: env.KODOCO_PAT != ''
+        run: |
+          bash scripts/push-built-site.sh \
+            "https://x-access-token:${KODOCO_PAT}@github.com/karasu-kai/kodoco.git" \
+            hostinger \
+            deploy \
+            "Deploy $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          echo "synced=true" >> "$GITHUB_OUTPUT"
+
+      - name: Kodoco sync skipped — add KODOCO_PAT secret
+        if: env.KODOCO_PAT == ''
+        env:
+          KODOCO_PAT: ${{ secrets.KODOCO_PAT }}
+        run: |
+          echo "::warning::KODOCO_PAT secret is not set — kodoco repo was NOT updated."
+          echo "Add KODOCO_PAT to admin repo secrets, then run 'Sync site to kodoco repo' workflow."
+          echo "Or point Hostinger Git at karasu-kai/admin branch hostinger (assets already there)."
 
       - name: Upload to Hostinger via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -41,18 +61,3 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./deploy/
           server-dir: /public_html/
-
-      - name: Sync to kodoco repo
-        continue-on-error: true
-        env:
-          KODOCO_PAT: ${{ secrets.KODOCO_PAT }}
-        if: env.KODOCO_PAT != ''
-        run: |
-          cd deploy
-          git init
-          git checkout -b hostinger
-          git add -A
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git commit -m "Deploy $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-          git push -f "https://x-access-token:${KODOCO_PAT}@github.com/karasu-kai/kodoco.git" hostinger

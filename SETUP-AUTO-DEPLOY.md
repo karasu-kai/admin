@@ -1,51 +1,58 @@
 # Auto-deploy
 
-Push to **`admin`** repo, branch **`kodoco`** → GitHub Actions rebuilds branch **`hostinger`**.
+## How it works
 
-Then sync **`hostinger`** → **`kodoco`** repo for Hostinger to pull.
+```
+Push to admin/kodoco  →  GitHub Actions builds  →  admin/hostinger updated
+                                                    ↓
+                              KODOCO_PAT set?  →  kodoco/hostinger synced
+                                                    ↓
+                              Hostinger Git auto-pulls  →  kodoco.com.au live
+```
 
 ---
 
 ## GitHub Actions (admin repo)
 
-Runs on push to `kodoco` branch:
-1. Builds the site
-2. Updates `hostinger` branch on **admin** repo
+**Deploy to Hostinger** runs on every push to `kodoco` branch:
 
-Check: https://github.com/karasu-kai/admin/actions
+1. Builds the site (`npm run hostinger`)
+2. Verifies `deploy/` includes `assets/` folder
+3. Pushes to `hostinger` branch on **admin** repo
+4. Syncs to **kodoco** repo if `KODOCO_PAT` secret is set
+5. Uploads via FTP if FTP secrets are set
 
----
-
-## Sync to kodoco repo
-
-After build, push `hostinger` branch to your **kodoco** repo:
-
-```bash
-git clone -b hostinger https://github.com/karasu-kai/admin.git /tmp/sync
-cd /tmp/sync
-git push -f https://github.com/karasu-kai/kodoco.git HEAD:hostinger
-```
-
-Hostinger Git auto-pulls from **kodoco** repo.
+Check runs: https://github.com/karasu-kai/admin/actions
 
 ---
 
-## Optional: FTP deploy
+## One-time setup
 
-Add secrets to **admin** repo → Settings → Secrets:
+See **`KODOCO-REPO.md`** for:
 
-| Secret | Value |
-|--------|-------|
-| `FTP_SERVER` | `ftp.kodoco.com.au` |
-| `FTP_USERNAME` | `u448359330.kodoco` |
-| `FTP_PASSWORD` | your FTP password |
-
-FTP deploy runs automatically if secrets are set.
+- Fast fix (point Hostinger at admin/hostinger — works immediately)
+- Long-term kodoco repo sync (add `KODOCO_PAT` secret)
+- Fix 421 Git deploy error
 
 ---
 
-## Repo secrets for auto-sync to kodoco
+## Repo secrets
 
-Add `KODOCO_PAT` secret (Personal Access Token with repo access) to auto-push to **kodoco** repo on every deploy.
+| Secret | Purpose |
+|--------|---------|
+| `KODOCO_PAT` | Push built site to kodoco repo (GitHub PAT with repo scope) |
+| `FTP_SERVER` | Optional direct FTP deploy (`ftp.kodoco.com.au`) |
+| `FTP_USERNAME` | Optional FTP user (`u448359330.kodoco`) |
+| `FTP_PASSWORD` | Optional FTP password |
 
-Create token: GitHub → Settings → Developer settings → Personal access tokens
+Create PAT: GitHub → Settings → Developer settings → Personal access tokens → classic → tick **repo**
+
+---
+
+## Manual sync
+
+If you need to re-push to kodoco without a code change:
+
+1. https://github.com/karasu-kai/admin/actions/workflows/sync-kodoco.yml
+2. Branch: **kodoco**
+3. **Run workflow**

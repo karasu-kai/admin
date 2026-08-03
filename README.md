@@ -16,9 +16,9 @@
 
 ## Git deploy to Hostinger
 
-See **`KODOCO-REPO.md`** — full setup including assets folder sync.
+**Site blank?** See **`KODOCO-REPO.md`** — fastest fix is point Hostinger Git at `karasu-kai/admin` branch `hostinger` (assets folder is already there).
 
-**Quick fix for missing assets:** run **Sync site to kodoco repo** workflow after adding `KODOCO_PAT` secret.
+For kodoco repo sync: add `KODOCO_PAT` secret, then run **Sync site to kodoco repo** workflow.
 
 ---
 
