@@ -2,7 +2,7 @@ name: Deploy to Hostinger
 
 on:
   push:
-    branches: [main, kodoco]
+    branches: [kodoco]
   workflow_dispatch:
 
 jobs:
@@ -21,7 +21,7 @@ jobs:
       - run: npm ci
       - run: npm run hostinger
 
-      - name: Publish to hostinger branch
+      - name: Publish clean site to hostinger branch
         run: |
           cd deploy
           git init
@@ -32,7 +32,17 @@ jobs:
           git commit -m "Deploy $(date -u +%Y-%m-%dT%H:%M:%SZ)"
           git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" hostinger
 
-      - name: Mirror to kodoco repo
+      - name: Upload to Hostinger via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        continue-on-error: true
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./deploy/
+          server-dir: /public_html/
+
+      - name: Sync to kodoco repo
         continue-on-error: true
         env:
           KODOCO_PAT: ${{ secrets.KODOCO_PAT }}
@@ -46,5 +56,3 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git commit -m "Deploy $(date -u +%Y-%m-%dT%H:%M:%SZ)"
           git push -f "https://x-access-token:${KODOCO_PAT}@github.com/karasu-kai/kodoco.git" hostinger
-          cd ..
-          git push -f "https://x-access-token:${KODOCO_PAT}@github.com/karasu-kai/kodoco.git" HEAD:main

@@ -1,57 +1,46 @@
-# kodoco repo — what goes here
+# kodoco repo — tidy structure
 
-This is the **live deploy repo** for Hostinger. Only built site files — no source code.
-
----
-
-## Branch: `hostinger`
-
-Upload these files to the **root** of the branch (not in a subfolder):
+The **kodoco** repo should ONLY contain these files at the **root** of branch **`hostinger`**:
 
 ```
-index.html
-.htaccess
-favicon.svg
-icons.svg
-assets/
-  index-D3IqGYwh.css
-  index-DBm-rzTJ.js
+hostinger branch (root)
+├── index.html
+├── .htaccess
+├── favicon.svg
+├── icons.svg
+└── assets/
+    ├── index-D3IqGYwh.css
+    └── index-DBm-rzTJ.js
 ```
 
----
+## Delete from kodoco repo if present
 
-## Get the files
-
-Download from: **https://github.com/karasu-kai/admin/tree/hostinger**
-
-Or run locally:
-
-```bash
-git clone -b hostinger https://github.com/karasu-kai/admin.git
-cd admin
-git init
-git remote add kodoco https://github.com/karasu-kai/kodoco.git
-git push -f kodoco HEAD:hostinger
-```
-
----
-
-## Hostinger Git settings
-
-| Setting | Value |
-|---------|-------|
-| Repository | `https://github.com/karasu-kai/kodoco.git` |
-| Branch | `hostinger` |
-| Install path | `public_html` |
-| Auto deploy | On |
-
----
-
-## Do NOT put here
-
+- `README.md` (optional — or replace with kodoco-repo-README.md content)
 - `src/` folder
 - `node_modules/`
 - `package.json`
-- Source code
+- `deploy/` subfolder (files must be at **root**, not inside deploy/)
+- Any Shopify or old files
 
-Source code lives on **`karasu-kai/admin`** branch **`kodoco`**.
+## Clean copy (download fresh)
+
+**https://github.com/karasu-kai/admin/tree/hostinger**
+
+Download each file → upload to kodoco repo root → commit.
+
+## Hostinger Git
+
+After tidy upload:
+1. hPanel → Git
+2. Repo: `https://github.com/karasu-kai/kodoco.git`
+3. Branch: **`hostinger`**
+4. Path: **`public_html`**
+5. **Deploy**
+
+## Alternative — skip kodoco repo
+
+Point Hostinger Git directly at:
+- Repo: `https://github.com/karasu-kai/admin.git`
+- Branch: **`hostinger`**
+
+Same clean files, already maintained automatically.
