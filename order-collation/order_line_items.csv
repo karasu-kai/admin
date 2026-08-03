@@ -1,0 +1,55 @@
+customer,code,qty,unit,status,notes,parse_rule
+Simone De la V,MS40,20,vials,shipped,listed as -20 vials Ms40; SHIPPED,explicit vials
+Simone De la V,RT10,30,vials,shipped,crossed out / SHIPPED 23/07/26,explicit vials
+Naji Sassine,RT10,10,vials,order,10x rt10,Nx = vials
+Naji Sassine,GHK serum,20,units,order,20x GHK serum,Nx = units
+Cale,BPC-157 + TB500,1,vials,order,1) BPC-157 + TB500 10mg+10mg (1 combo box),combo box as 1
+Dimitri,RT20,10,vials,shipped,RT20 shipped 23/07/26,bare code = 1 box = 10
+Daniel Locke,BB10,10,vials,order,BB10 (pink highlight; may be done),bare code = 1 box = 10
+James Stevens,CP10,10,vials,order,10x CP10,Nx = vials
+Deus Vult,RT10,10,vials,order,10x RT10,Nx = vials
+Shosti Haq,RT10,20,vials,order,20x RT10,Nx = vials
+Rosie,Bac water,1,units,order,Bac water; date 18 Nov 2025,as listed
+Nay,SLUPP-332,2,kits,order,2×Slupp-332 kits,kits
+Nay,BPC-157 20mg,10,vials,order,1 box (10 vials); Order Value shows 2 — may mean 2 boxes,1 box = 10 vials
+Kate Kiewet,RT10,20,vials,order,20x RT10,Nx = vials
+Alex mcmahon,RT10,10,vials,order,Rt10 $550,bare code = 1 box = 10
+Alex mcmahon,CP10,10,vials,order,Cp10 $550,bare code = 1 box = 10
+Josh Westerberg,Glow,1,units,order,Glow (from Glow CP10 rt20 ms40),as listed
+Josh Westerberg,CP10,10,vials,order,bare CP10 in Glow CP10 rt20 ms40,bare code = 1 box = 10
+Josh Westerberg,RT20,10,vials,order,bare rt20 in Glow CP10 rt20 ms40,bare code = 1 box = 10
+Josh Westerberg,MS40,10,vials,order,bare ms40 in Glow CP10 rt20 ms40,bare code = 1 box = 10
+Tara Canin,—,0,units,note,Updated list to fulfill,
+Darren Parrera,RT10,10,vials,order,10xrt10,Nx = vials
+Darren Parrera,SLUPP-332,10,units,order,10slupp,Nx = units
+Jamie Eid,RT10,20,vials,order,20x RT10,Nx = vials
+Dani Gale,MOTS10,10,vials,order,10x MOTS10,Nx = vials
+Dani Gale,Reta,1,box,order,1 box Reta,box as 1 (non-coded)
+Dani Gale,GHCKU,1,box,order,1 box ghcku,box as 1 (non-coded)
+Dani Gale,NAD+ nasal spray,1,units,order,1 nad+ nasal spray,as listed
+Dani Gale,Reusable pen,1,units,order,1 reusable pen,as listed
+Dani Gale,GHCKU serum,1,units,order,1 ghcku serum,as listed
+Troy Baker,RT10,10,vials,order,1 box rt10,1 box = 10 vials
+Ben Thompson,RT36,5,vials,order,5x RT36,Nx = vials
+Jamie Garis,Humanin,1,units,order,Humanin,as listed
+Megan Carrabott,—,0,units,refund,$2100.00 REFUND,
+Vito Trentadue,—,0,units,note,ZACH PAPAS (name in order cell),
+Matt Ward,RT20,10,vials,order,RT20,bare code = 1 box = 10
+Michelle Keane,RT10,10,vials,order,rt10,bare code = 1 box = 10
+Meghan Durie,—,0,units,refund,REFUND $450??,
+Aron Lav,—,0,units,refund,REFUND $1150,
+Kieran McAlister,CU50,5,vials,order,1/2cu50,half box = 5 vials
+Isla michado,Tirz 10,5,units,shipped,5x Tirz 10 SHIPPED 23/07/26,Nx = vials
+Isla michado,Bac water,1,units,order,BAC on row under Tirz,as listed
+alex hogan,RT10,10,vials,order,10x rt10,Nx = vials
+Josh Dahl,RT10,8,vials,order,8rt10 vials,explicit vials
+Simon qbcc,RT10,10,vials,order,10x rt10 bac,Nx = vials
+Simon qbcc,Bac water,1,units,order,bac noted with rt10,as listed
+Dan nunn,H15,10,vials,order,H15 x1,x1 bare code = 1 box = 10
+Dan nunn,MS40,10,vials,order,MS40 x1,x1 bare code = 1 box = 10
+Dan nunn,RT10,10,vials,order,RT10 x1,x1 bare code = 1 box = 10
+MARK ROBINSON,Semax,50,units,order,NASALS,as listed
+MARK ROBINSON,Selank,30,units,order,NASALS,as listed
+MARK ROBINSON,DSIP,20,units,order,NASALS,as listed
+MARK ROBINSON,NAD+,20,units,order,NASALS,as listed
+MARK ROBINSON,Oxy,20,units,order,NASALS,as listed
