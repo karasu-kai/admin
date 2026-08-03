@@ -1,7 +1,7 @@
 # Auto-deploy
 
 ```
-Push to admin/kodoco  →  GitHub Actions builds  →  kodoco/hostinger updated  →  Hostinger pulls  →  live
+Push to admin/kodoco  →  GitHub Actions builds  →  kodoco/main updated  →  Hostinger pulls  →  live
 ```
 
 ---
@@ -12,18 +12,17 @@ See **`KODOCO-REPO.md`**:
 
 1. Add **`KODOCO_PAT`** secret to admin repo
 2. Run **Sync site to kodoco repo** workflow once
-3. Confirm Hostinger Git points at `karasu-kai/kodoco` branch `hostinger`
+3. Confirm Hostinger Git points at `karasu-kai/kodoco` branch `main`
 
 ---
 
 ## GitHub Actions
 
-**Deploy to Hostinger** — runs on push to `kodoco` branch:
+**Deploy to kodoco** — runs on push to `kodoco` branch:
 
-1. Builds site (`npm run hostinger`)
-2. Verifies `assets/` folder exists
-3. Pushes to **`karasu-kai/kodoco`** branch **`hostinger`**
-4. Optional FTP upload if FTP secrets are set
+1. Builds site
+2. Verifies `assets/` folder
+3. Pushes to **`karasu-kai/kodoco`** branch **`main`**
 
 **Sync site to kodoco repo** — manual re-sync or auto-runs after deploy.
 

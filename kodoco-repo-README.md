@@ -2,7 +2,7 @@
 
 This repo contains **only the built website** for kodoco.com.au.
 
-## Files (root of `hostinger` branch)
+## Files (root of `main`)
 
 ```
 index.html
@@ -12,14 +12,14 @@ icons.svg
 assets/
 ```
 
-**Do not add source code, README duplicates, or subfolders.**
+Do not add source code or extra folders.
 
-## Hostinger Git settings
+## Hostinger Git
 
 | Setting | Value |
 |---------|-------|
 | Repository | `https://github.com/karasu-kai/kodoco.git` |
-| Branch | `hostinger` |
+| Branch | `main` |
 | Path | `public_html` |
 
 ## Source code

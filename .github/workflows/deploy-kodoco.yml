@@ -1,4 +1,4 @@
-name: Deploy to Hostinger
+name: Deploy to kodoco
 
 on:
   push:
@@ -31,13 +31,13 @@ jobs:
       - run: npm run hostinger
       - run: bash scripts/verify-deploy.sh deploy
 
-      - name: Push built site to kodoco repo (hostinger branch)
+      - name: Push built site to kodoco repo
         env:
           KODOCO_PAT: ${{ secrets.KODOCO_PAT }}
         run: |
           bash scripts/push-built-site.sh \
             "https://x-access-token:${KODOCO_PAT}@github.com/karasu-kai/kodoco.git" \
-            hostinger \
+            main \
             deploy \
             "Deploy $(date -u +%Y-%m-%dT%H:%M:%SZ)"
 

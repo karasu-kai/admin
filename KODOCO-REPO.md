@@ -1,13 +1,14 @@
-# kodoco repo — Git deploy for Hostinger
+# kodoco repo — live site
 
 **Production repo:** `karasu-kai/kodoco`  
-**Hostinger pulls from:** branch `hostinger` → path `public_html`
+**Branch:** `main` (built site files at repo root)  
+**Hostinger Git path:** `public_html`
 
 ---
 
 ## Current problem
 
-Site loads blank because `index.html` is on the server but the **`assets/` folder is missing** (404 on JS/CSS). GitHub web upload skipped the assets folder.
+Site loads blank — `index.html` is on the server but the **`assets/` folder is missing** (404 on JS/CSS).
 
 ---
 
@@ -32,9 +33,9 @@ Site loads blank because `index.html` is on the server but the **`assets/` folde
 2. Click **Run workflow** → **Run workflow**
 3. Wait for green tick (~1 min)
 
-This builds the site and pushes **everything including `assets/`** to `karasu-kai/kodoco` branch `hostinger`.
+This builds the site and pushes **everything including `assets/`** to `karasu-kai/kodoco` on branch **`main`**.
 
-Then in **Hostinger hPanel → Git**, click **Deploy** (or wait for auto-deploy).
+Then in **Hostinger hPanel → Git**, click **Deploy**.
 
 ---
 
@@ -43,7 +44,7 @@ Then in **Hostinger hPanel → Git**, click **Deploy** (or wait for auto-deploy)
 | Field | Value |
 |-------|-------|
 | Repository | `https://github.com/karasu-kai/kodoco.git` |
-| Branch | `hostinger` |
+| Branch | `main` |
 | Path | `public_html` |
 | Auto deploy | **On** |
 
@@ -58,15 +59,15 @@ Then in **Hostinger hPanel → Git**, click **Deploy** (or wait for auto-deploy)
 | Cause | Fix |
 |-------|-----|
 | Private repo | Reconnect GitHub in Hostinger → grant access to **kodoco** |
-| Wrong branch | Use **`hostinger`** |
+| Wrong branch | Use **`main`** |
 | Incomplete repo | Run sync workflow above (needs `KODOCO_PAT`) |
 | Token expired | Regenerate token, update `KODOCO_PAT` |
 
 ---
 
-## Repo layout (kodoco / hostinger branch)
+## What belongs in kodoco repo
 
-Only built site files at root:
+Only built site files at the root of `main`:
 
 ```
 index.html
@@ -78,17 +79,17 @@ assets/
   index-*.js
 ```
 
-No source code. No subfolders except `assets/`.
+No source code. No extra folders.
 
 ---
 
-## Auto-deploy after setup
+## Auto-deploy
 
 1. Edit source on **admin** repo, branch **kodoco**
-2. Push → GitHub Actions builds and pushes to **kodoco/hostinger**
+2. Push → GitHub Actions builds and pushes to **kodoco** repo
 3. Hostinger auto-pulls → kodoco.com.au updates
 
-Requires `KODOCO_PAT` secret (Step 2 above).
+Requires `KODOCO_PAT` secret.
 
 Check builds: https://github.com/karasu-kai/admin/actions
 
@@ -96,12 +97,10 @@ Check builds: https://github.com/karasu-kai/admin/actions
 
 ## Optional FTP fallback
 
-If Git deploy is stuck, add FTP secrets to admin repo:
-
 | Secret | Value |
 |--------|-------|
 | `FTP_SERVER` | `ftp.kodoco.com.au` |
 | `FTP_USERNAME` | `u448359330.kodoco` |
 | `FTP_PASSWORD` | your FTP password |
 
-Runs automatically on deploy if set.
+Add to admin repo secrets. Runs on deploy if set.
