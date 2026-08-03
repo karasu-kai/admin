@@ -8,9 +8,18 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
+      - name: Require KODOCO_PAT secret
+        env:
+          KODOCO_PAT: ${{ secrets.KODOCO_PAT }}
+        run: |
+          if [ -z "$KODOCO_PAT" ]; then
+            echo "::error::KODOCO_PAT secret is not set."
+            echo "Add a GitHub PAT with repo access as KODOCO_PAT in admin repo secrets."
+            echo "See KODOCO-REPO.md"
+            exit 1
+          fi
+
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
@@ -22,35 +31,15 @@ jobs:
       - run: npm run hostinger
       - run: bash scripts/verify-deploy.sh deploy
 
-      - name: Publish built site to admin hostinger branch
-        run: |
-          bash scripts/push-built-site.sh \
-            "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" \
-            hostinger \
-            deploy \
-            "Deploy $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-
-      - name: Sync to kodoco repo
-        id: sync_kodoco
+      - name: Push built site to kodoco repo (hostinger branch)
         env:
           KODOCO_PAT: ${{ secrets.KODOCO_PAT }}
-        if: env.KODOCO_PAT != ''
         run: |
           bash scripts/push-built-site.sh \
             "https://x-access-token:${KODOCO_PAT}@github.com/karasu-kai/kodoco.git" \
             hostinger \
             deploy \
             "Deploy $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-          echo "synced=true" >> "$GITHUB_OUTPUT"
-
-      - name: Kodoco sync skipped — add KODOCO_PAT secret
-        if: env.KODOCO_PAT == ''
-        env:
-          KODOCO_PAT: ${{ secrets.KODOCO_PAT }}
-        run: |
-          echo "::warning::KODOCO_PAT secret is not set — kodoco repo was NOT updated."
-          echo "Add KODOCO_PAT to admin repo secrets, then run 'Sync site to kodoco repo' workflow."
-          echo "Or point Hostinger Git at karasu-kai/admin branch hostinger (assets already there)."
 
       - name: Upload to Hostinger via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5

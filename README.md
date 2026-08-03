@@ -8,17 +8,16 @@
 
 | Repo | Branch | Purpose |
 |------|--------|---------|
-| `karasu-kai/admin` | `kodoco` | Edit source code here |
-| `karasu-kai/admin` | `hostinger` | Built site with **assets/** folder |
-| `karasu-kai/kodoco` | `hostinger` | Hostinger Git pulls from here |
+| `karasu-kai/admin` | `kodoco` | Source code — edit here |
+| `karasu-kai/kodoco` | `hostinger` | Built site — Hostinger Git deploys from here |
 
 ---
 
-## Git deploy to Hostinger
+## Git deploy
 
-**Site blank?** See **`KODOCO-REPO.md`** — fastest fix is point Hostinger Git at `karasu-kai/admin` branch `hostinger` (assets folder is already there).
+Hostinger pulls from **`karasu-kai/kodoco`** branch **`hostinger`**.
 
-For kodoco repo sync: add `KODOCO_PAT` secret, then run **Sync site to kodoco repo** workflow.
+**Site blank?** The `assets/` folder is missing from kodoco repo. See **`KODOCO-REPO.md`** — add `KODOCO_PAT` secret and run the sync workflow.
 
 ---
 

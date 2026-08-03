@@ -1,94 +1,72 @@
-# Fix kodoco.com.au deploy
+# kodoco repo — Git deploy for Hostinger
 
-**Problem:** Site loads blank — `index.html` is on the server but the `assets/` folder is missing (404 on JS/CSS).
-
-**Cause:** The kodoco repo was updated via GitHub web upload, which skipped the `assets/` folder. Hostinger Git pulls from kodoco, so the live site is incomplete.
-
----
-
-## Fastest fix (about 2 minutes)
-
-Point Hostinger Git at the **admin** repo — the `hostinger` branch already has the full site including `assets/`.
-
-1. Log in to **Hostinger hPanel** → **Advanced** → **Git**
-2. Edit your existing repository (or create new):
-3. Set these values:
-
-| Field | Value |
-|-------|-------|
-| Repository URL | `https://github.com/karasu-kai/admin.git` |
-| Branch | `hostinger` |
-| Install path | `public_html` |
-| Auto deploy | **On** |
-
-4. If GitHub asks you to connect — sign in and grant access to **karasu-kai/admin**
-5. Click **Deploy**
-
-Verify: open https://kodoco.com.au — you should see the black KODO CO site with working Shop and Merch pages.
-
-Assets are here if you want to check: https://github.com/karasu-kai/admin/tree/hostinger/assets
+**Production repo:** `karasu-kai/kodoco`  
+**Hostinger pulls from:** branch `hostinger` → path `public_html`
 
 ---
 
-## Long-term setup (kodoco repo + auto-sync)
+## Current problem
 
-Keep using **karasu-kai/kodoco** as the production deploy repo.
+Site loads blank because `index.html` is on the server but the **`assets/` folder is missing** (404 on JS/CSS). GitHub web upload skipped the assets folder.
+
+---
+
+## Fix it (3 steps)
 
 ### Step 1 — Create a GitHub token
 
-1. Go to https://github.com/settings/tokens
-2. **Generate new token (classic)**
-3. Tick **repo** (full control of private repositories)
-4. Generate → **copy the token**
+1. https://github.com/settings/tokens → **Generate new token (classic)**
+2. Tick **`repo`**
+3. Generate → copy the token
 
 ### Step 2 — Add token to admin repo
 
-1. Go to https://github.com/karasu-kai/admin/settings/secrets/actions
+1. https://github.com/karasu-kai/admin/settings/secrets/actions
 2. **New repository secret**
-3. Name: `KODOCO_PAT`
-4. Value: paste your token
-5. Save
+3. Name: **`KODOCO_PAT`**
+4. Value: paste your token → Save
 
 ### Step 3 — Run sync (one click)
 
-1. Go to https://github.com/karasu-kai/admin/actions/workflows/sync-kodoco.yml
-   - Use branch dropdown: select **kodoco**
+1. https://github.com/karasu-kai/admin/actions/workflows/sync-kodoco.yml
 2. Click **Run workflow** → **Run workflow**
-3. Wait for green check (~30 seconds)
+3. Wait for green tick (~1 min)
 
-This pushes the full site **including assets/** to kodoco repo.
+This builds the site and pushes **everything including `assets/`** to `karasu-kai/kodoco` branch `hostinger`.
 
-### Step 4 — Hostinger Git settings (kodoco repo)
+Then in **Hostinger hPanel → Git**, click **Deploy** (or wait for auto-deploy).
+
+---
+
+## Hostinger Git settings
 
 | Field | Value |
 |-------|-------|
-| Repository URL | `https://github.com/karasu-kai/kodoco.git` |
+| Repository | `https://github.com/karasu-kai/kodoco.git` |
 | Branch | `hostinger` |
-| Install path | `public_html` |
+| Path | `public_html` |
 | Auto deploy | **On** |
 
-For a **private** repo: connect your GitHub account in Hostinger and grant access to **kodoco**.
-
-Click **Deploy**.
+**Private repo:** connect GitHub in Hostinger and grant access to **kodoco**.
 
 ---
 
 ## Fix 421 error
 
-Error 421 means Hostinger cannot access your GitHub repo.
+421 = Hostinger cannot reach your GitHub repo.
 
 | Cause | Fix |
 |-------|-----|
-| Private repo | Reconnect GitHub in Hostinger Git → grant access to the repo |
-| Wrong branch | Use `hostinger` (not `main` or `kodoco`) |
-| Empty / incomplete repo | Run sync workflow above, or use admin/hostinger as temporary source |
-| Token expired | Regenerate GitHub token, update KODOCO_PAT secret |
+| Private repo | Reconnect GitHub in Hostinger → grant access to **kodoco** |
+| Wrong branch | Use **`hostinger`** |
+| Incomplete repo | Run sync workflow above (needs `KODOCO_PAT`) |
+| Token expired | Regenerate token, update `KODOCO_PAT` |
 
 ---
 
-## What gets deployed
+## Repo layout (kodoco / hostinger branch)
 
-Root of `hostinger` branch — nothing else:
+Only built site files at root:
 
 ```
 index.html
@@ -100,22 +78,25 @@ assets/
   index-*.js
 ```
 
+No source code. No subfolders except `assets/`.
+
 ---
 
-## After every site update
+## Auto-deploy after setup
 
-1. Push code changes to **admin** repo, branch **kodoco**
-2. GitHub Actions builds and updates **admin/hostinger** automatically
-3. If `KODOCO_PAT` is set, kodoco repo syncs automatically too
-4. Hostinger auto-deploys on git pull
+1. Edit source on **admin** repo, branch **kodoco**
+2. Push → GitHub Actions builds and pushes to **kodoco/hostinger**
+3. Hostinger auto-pulls → kodoco.com.au updates
+
+Requires `KODOCO_PAT` secret (Step 2 above).
 
 Check builds: https://github.com/karasu-kai/admin/actions
 
 ---
 
-## Optional: FTP deploy (bypasses Git)
+## Optional FTP fallback
 
-Add these secrets to admin repo → Settings → Secrets:
+If Git deploy is stuck, add FTP secrets to admin repo:
 
 | Secret | Value |
 |--------|-------|
@@ -123,4 +104,4 @@ Add these secrets to admin repo → Settings → Secrets:
 | `FTP_USERNAME` | `u448359330.kodoco` |
 | `FTP_PASSWORD` | your FTP password |
 
-FTP deploy runs on every push to kodoco branch if secrets are set.
+Runs automatically on deploy if set.
