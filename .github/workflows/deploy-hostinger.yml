@@ -3,6 +3,7 @@ name: Deploy to Hostinger
 on:
   push:
     branches: [main, kodoco]
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -30,3 +31,20 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git commit -m "Deploy $(date -u +%Y-%m-%dT%H:%M:%SZ)"
           git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" hostinger
+
+      - name: Mirror to kodoco repo
+        continue-on-error: true
+        env:
+          KODOCO_PAT: ${{ secrets.KODOCO_PAT }}
+        if: env.KODOCO_PAT != ''
+        run: |
+          cd deploy
+          git init
+          git checkout -b hostinger
+          git add -A
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "Deploy $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git push -f "https://x-access-token:${KODOCO_PAT}@github.com/karasu-kai/kodoco.git" hostinger
+          cd ..
+          git push -f "https://x-access-token:${KODOCO_PAT}@github.com/karasu-kai/kodoco.git" HEAD:main
