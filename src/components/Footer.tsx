@@ -68,16 +68,6 @@ export default function Footer() {
                     The Ritual
                   </a>
                 </li>
-                <li>
-                  <a
-                    href="https://kodoco.com.au"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-white/70 transition-colors hover:text-white"
-                  >
-                    Current Store
-                  </a>
-                </li>
               </ul>
             </div>
             <div>

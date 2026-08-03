@@ -158,8 +158,25 @@ export function productPath(product: Product): string {
   return product.category === 'merch' ? `/merch#${product.id}` : `/shop#${product.id}`
 }
 
-const SHOPIFY_STORE = 'https://shop.kodoco.com.au'
+/** Paste Stripe Payment Links here — one per product. See SETUP-PAYMENTS.md */
+export const paymentLinks: Record<string, string> = {
+  'ghk-cu-serum': '',
+  'ghk-cu-cream': '',
+  'ghk-cu-mist': '',
+  'face-mask': '',
+  'travel-bag': '',
+  'logo-tee': '',
+  'oversized-hoodie': '',
+  'structured-cap': '',
+  'canvas-tote': '',
+}
 
-export function shopifyUrl(product: Product): string {
-  return `${SHOPIFY_STORE}/products/${product.id}`
+export function buyUrl(product: Product): string {
+  const link = paymentLinks[product.id]
+  if (link) return link
+  return `mailto:hello@kodoco.com.au?subject=${encodeURIComponent(`Order: ${product.name}`)}`
+}
+
+export function hasPaymentLink(product: Product): boolean {
+  return Boolean(paymentLinks[product.id])
 }

@@ -1,7 +1,7 @@
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 import type { Product } from '../data/products'
-import { shopifyUrl } from '../data/products'
+import { buyUrl, hasPaymentLink } from '../data/products'
 import ProductVisual from './ProductVisual'
 import MerchVisual from './MerchVisual'
 import type { MerchType, SkincareType } from '../data/products'
@@ -96,7 +96,7 @@ export default function ProductDetail({ product, index }: ProductDetailProps) {
               </span>
             </div>
             <a
-              href={shopifyUrl(product)}
+              href={buyUrl(product)}
               target="_blank"
               rel="noopener noreferrer"
               className={`rounded-full px-8 py-3.5 text-xs font-medium uppercase tracking-[0.25em] transition-transform hover:scale-[1.02] ${
@@ -105,7 +105,7 @@ export default function ProductDetail({ product, index }: ProductDetailProps) {
                   : 'bg-white text-kodo-black'
               }`}
             >
-              Add to Bag
+              {hasPaymentLink(product) ? 'Buy Now' : 'Enquire'}
             </a>
           </div>
         </motion.div>

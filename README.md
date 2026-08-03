@@ -51,6 +51,8 @@ Open http://localhost:5173
 **Skincare:** GHK-Cu Serum, Cream, HA Mist, Renewal Mask  
 **Merch:** Travel Bag, Logo Tee, Hoodie, Cap, Canvas Tote
 
+**Payments:** Stripe Payment Links (see **`SETUP-PAYMENTS.md`**) — no Shopify needed.
+
 ---
 
 ## New GitHub repo setup
