@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Test Platform — Karasu Kai</title>
+  <meta name="description" content="Karasu Kai test platform — staging environment for your project."/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black: #0d0d0d;
+      --off:   #131313;
+      --g1:    #1a1a1a;
+      --g2:    #2a2a2a;
+      --g3:    #545454;
+      --g4:    #888;
+      --white: #f0f0f0;
+      --red:   #c8102e;
+      --line:  #1e1e1e;
+      --glow:  rgba(200, 16, 46, 0.45);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Syne', sans-serif;
+      overflow: hidden;
+    }
+
+    /* ── Background layers ── */
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .bg-grid {
+      position: absolute;
+      inset: -50%;
+      background-image:
+        linear-gradient(rgba(200, 16, 46, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200, 16, 46, 0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      transform: perspective(500px) rotateX(60deg) translateY(-10%);
+      animation: gridDrift 20s linear infinite;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 20%, transparent 70%);
+    }
+
+    @keyframes gridDrift {
+      0%   { transform: perspective(500px) rotateX(60deg) translateY(-10%) translateZ(0); }
+      100% { transform: perspective(500px) rotateX(60deg) translateY(-10%) translateZ(60px); }
+    }
+
+    .bg-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.35;
+      animation: orbFloat 8s ease-in-out infinite alternate;
+    }
+    .bg-orb--1 {
+      width: 420px; height: 420px;
+      background: radial-gradient(circle, var(--red) 0%, transparent 70%);
+      top: -10%; left: -5%;
+      animation-delay: 0s;
+    }
+    .bg-orb--2 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(200,16,46,.4) 0%, transparent 70%);
+      bottom: -5%; right: -5%;
+      animation-delay: -3s;
+      animation-duration: 10s;
+    }
+
+    @keyframes orbFloat {
+      0%   { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(30px, -20px) scale(1.08); }
+    }
+
+    canvas#particles {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .scanline {
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.03) 2px,
+        rgba(0, 0, 0, 0.03) 4px
+      );
+      pointer-events: none;
+    }
+
+    /* ── Red slash accent ── */
+    .slash {
+      position: fixed;
+      top: -20%;
+      left: 50%;
+      width: 4px;
+      height: 140%;
+      background: var(--red);
+      box-shadow: 0 0 24px 6px var(--glow), 0 0 60px 12px rgba(200,16,46,.2);
+      transform: rotate(10deg) translateX(-50%);
+      z-index: 1;
+      opacity: 0;
+      animation: slashReveal 1.2s 0.3s cubic-bezier(.76,0,.18,1) forwards;
+    }
+
+    @keyframes slashReveal {
+      0%   { opacity: 0; transform: rotate(10deg) translateX(-50%) scaleY(0); transform-origin: top; }
+      40%  { opacity: 1; }
+      100% { opacity: 0.15; transform: rotate(10deg) translateX(-50%) scaleY(1); }
+    }
+
+    /* ── Main layout ── */
+    .page {
+      position: relative;
+      z-index: 2;
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      text-align: center;
+    }
+
+    /* ── Crow icon ── */
+    .crow {
+      width: clamp(40px, 6vw, 56px);
+      height: clamp(40px, 6vw, 56px);
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.1s forwards;
+    }
+
+    .crow svg { width: 100%; height: 100%; }
+
+    /* ── Brand ── */
+    .brand {
+      font-weight: 800;
+      font-size: clamp(1.6rem, 5vw, 3.2rem);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      line-height: 1;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.25s forwards;
+    }
+    .brand sup {
+      font-size: 0.28em;
+      color: var(--red);
+      vertical-align: super;
+      margin-left: 0.08em;
+    }
+
+    /* ── Environment badge ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
+      padding: 8px 18px;
+      border: 1px solid var(--line);
+      background: rgba(19, 19, 19, 0.8);
+      backdrop-filter: blur(12px);
+      font-family: 'DM Mono', monospace;
+      font-size: clamp(0.6rem, 1.6vw, 0.72rem);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--g4);
+      opacity: 0;
+      animation: fadeUp 0.7s 0.45s forwards, badgePulse 3s 1.5s ease-in-out infinite;
+    }
+
+    @keyframes badgePulse {
+      0%, 100% { border-color: var(--line); box-shadow: none; }
+      50%       { border-color: rgba(200,16,46,.35); box-shadow: 0 0 20px rgba(200,16,46,.08); }
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 0 8px var(--glow);
+      animation: dotBlink 2s ease-in-out infinite;
+    }
+
+    @keyframes dotBlink {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    /* ── Headline ── */
+    .headline {
+      margin-top: 48px;
+      font-weight: 800;
+      font-size: clamp(2rem, 6vw, 4.5rem);
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      max-width: 900px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.6s forwards;
+    }
+    .headline .dim { color: var(--g3); }
+    .headline .accent { color: var(--red); }
+
+    /* ── Body copy ── */
+    .body {
+      margin-top: 28px;
+      font-family: 'DM Mono', monospace;
+      font-size: clamp(0.75rem, 1.8vw, 0.88rem);
+      line-height: 1.85;
+      color: var(--g4);
+      max-width: 480px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.8s forwards;
+    }
+
+    /* ── Terminal block ── */
+    .terminal {
+      margin-top: 40px;
+      width: min(520px, 100%);
+      border: 1px solid var(--line);
+      background: var(--off);
+      text-align: left;
+      opacity: 0;
+      animation: fadeUp 0.8s 1s forwards, terminalGlow 4s 2s ease-in-out infinite;
+    }
+
+    @keyframes terminalGlow {
+      0%, 100% { box-shadow: 0 0 0 transparent; }
+      50%       { box-shadow: 0 8px 40px rgba(200,16,46,.06); }
+    }
+
+    .terminal-bar {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .terminal-bar span {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--g2);
+    }
+    .terminal-bar span:first-child { background: var(--red); opacity: 0.7; }
+
+    .terminal-body {
+      padding: 20px 22px;
+      font-family: 'DM Mono', monospace;
+      font-size: clamp(0.68rem, 1.6vw, 0.78rem);
+      line-height: 1.7;
+      color: var(--g3);
+    }
+    .terminal-body .prompt { color: var(--red); }
+    .terminal-body .val   { color: var(--white); }
+    .terminal-body .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 14px;
+      background: var(--red);
+      vertical-align: text-bottom;
+      margin-left: 2px;
+      animation: cursorBlink 1s step-end infinite;
+    }
+
+    @keyframes cursorBlink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+
+    /* ── Status row ── */
+    .status-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 36px;
+      opacity: 0;
+      animation: fadeUp 0.7s 1.15s forwards;
+    }
+
+    .status-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border: 1px solid var(--line);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--g4);
+      transition: border-color 0.3s, color 0.3s;
+    }
+
+    .status-chip .chip-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: #2ecc71;
+      box-shadow: 0 0 6px rgba(46,204,113,.5);
+      animation: dotBlink 2.5s ease-in-out infinite;
+    }
+    .status-chip:nth-child(2) .chip-dot { animation-delay: -0.8s; }
+    .status-chip:nth-child(3) .chip-dot { animation-delay: -1.6s; background: var(--red); box-shadow: 0 0 6px var(--glow); }
+
+    /* ── CTA ── */
+    .cta {
+      margin-top: 52px;
+      opacity: 0;
+      animation: fadeUp 0.7s 1.35s forwards;
+    }
+
+    .cta-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      font-family: 'DM Mono', monospace;
+      font-size: clamp(0.65rem, 1.8vw, 0.75rem);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--g4);
+      text-decoration: none;
+      padding: 14px 0;
+      transition: color 0.25s;
+    }
+    .cta-link:hover { color: var(--white); }
+    .cta-link:hover .cta-arr { transform: translateX(6px); }
+
+    .cta-arr {
+      display: flex;
+      align-items: center;
+      transition: transform 0.25s;
+    }
+    .cta-arr::before {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: var(--red);
+      margin-right: -1px;
+    }
+    .cta-arr::after {
+      content: '';
+      display: block;
+      width: 8px;
+      height: 8px;
+      border-top: 1px solid var(--red);
+      border-right: 1px solid var(--red);
+      transform: rotate(45deg);
+    }
+
+    /* ── Footer ── */
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--line);
+      background: rgba(13, 13, 13, 0.85);
+      backdrop-filter: blur(10px);
+      z-index: 3;
+      opacity: 0;
+      animation: fadeUp 0.6s 1.5s forwards;
+    }
+
+    .footer-left {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--g3);
+    }
+
+    .footer-host {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      color: var(--g3);
+    }
+    .footer-host span { color: var(--red); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .footer { flex-direction: column; gap: 8px; text-align: center; }
+      .status-row { gap: 8px; }
+      .status-chip { padding: 8px 12px; font-size: 0.58rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg" aria-hidden="true">
+    <div class="bg-grid"></div>
+    <div class="bg-orb bg-orb--1"></div>
+    <div class="bg-orb bg-orb--2"></div>
+    <canvas id="particles"></canvas>
+    <div class="scanline"></div>
+  </div>
+
+  <div class="slash" aria-hidden="true"></div>
+
+  <main class="page">
+    <div class="crow" aria-hidden="true">
+      <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M32 8C22 8 14 16 14 26C14 30 15.5 33.5 18 36L10 52L26 44C28 45 30 45.5 32 45.5C42 45.5 50 37.5 50 27.5C50 17.5 42 8 32 8Z" fill="#f0f0f0" opacity="0.9"/>
+        <circle cx="26" cy="24" r="2.5" fill="#0d0d0d"/>
+        <circle cx="38" cy="24" r="2.5" fill="#0d0d0d"/>
+        <path d="M28 32C30 34 34 34 36 32" stroke="#c8102e" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M48 18L56 10" stroke="#c8102e" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <p class="brand">Karasu Kai<sup>®</sup></p>
+
+    <div class="badge">
+      <span class="badge-dot"></span>
+      Test Platform
+    </div>
+
+    <h1 class="headline">
+      Your project lives<br/>
+      <span class="dim">in the</span> <span class="accent">testing</span> <span class="dim">zone.</span>
+    </h1>
+
+    <p class="body">
+      This is where we host your project in the testing environment.
+      Builds land here first — safe to break, ready to ship.
+    </p>
+
+    <div class="terminal" role="img" aria-label="Environment status terminal">
+      <div class="terminal-bar">
+        <span></span><span></span><span></span>
+      </div>
+      <div class="terminal-body">
+        <div><span class="prompt">$</span> env --status</div>
+        <div style="margin-top:6px">  platform&nbsp;&nbsp;: <span class="val">testplatform.space</span></div>
+        <div>  environment: <span class="val">staging</span></div>
+        <div>  managed_by : <span class="val">karasukai.com.au</span></div>
+        <div>  state&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span class="val" id="typed">initialising</span><span class="cursor"></span></div>
+      </div>
+    </div>
+
+    <div class="status-row">
+      <div class="status-chip"><span class="chip-dot"></span> Hosting active</div>
+      <div class="status-chip"><span class="chip-dot"></span> SSL enabled</div>
+      <div class="status-chip"><span class="chip-dot"></span> Staging only</div>
+    </div>
+
+    <div class="cta">
+      <a class="cta-link" href="https://www.karasukai.com.au" target="_blank" rel="noopener noreferrer">
+        Visit karasukai.com.au
+        <span class="cta-arr"></span>
+      </a>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <span class="footer-left">© Karasu Kai — Web &amp; App Development Studio</span>
+    <span class="footer-host">testplatform.<span>space</span></span>
+  </footer>
+
+  <script>
+    /* ── Particle field ── */
+    (function () {
+      const canvas = document.getElementById('particles');
+      const ctx = canvas.getContext('2d');
+      let w, h, particles = [];
+
+      function resize() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      }
+
+      function init() {
+        particles = Array.from({ length: 55 }, () => ({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: Math.random() * 1.4 + 0.3,
+          vx: (Math.random() - 0.5) * 0.25,
+          vy: (Math.random() - 0.5) * 0.25,
+          a: Math.random() * 0.35 + 0.05,
+        }));
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0) p.x = w;
+          if (p.x > w) p.x = 0;
+          if (p.y < 0) p.y = h;
+          if (p.y > h) p.y = 0;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(200, 16, 46, ${p.a})`;
+          ctx.fill();
+
+          for (let j = i + 1; j < particles.length; j++) {
+            const q = particles[j];
+            const dx = p.x - q.x;
+            const dy = p.y - q.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 120) {
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(q.x, q.y);
+              ctx.strokeStyle = `rgba(200, 16, 46, ${0.06 * (1 - dist / 120)})`;
+              ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(draw);
+      }
+
+      resize();
+      init();
+      draw();
+      window.addEventListener('resize', () => { resize(); init(); });
+    })();
+
+    /* ── Typing animation for terminal state ── */
+    (function () {
+      const el = document.getElementById('typed');
+      const words = ['initialising', 'deploying', 'ready ✓'];
+      let wi = 0, ci = 0, deleting = false;
+
+      function tick() {
+        const word = words[wi];
+        if (!deleting) {
+          el.textContent = word.slice(0, ++ci);
+          if (ci === word.length) {
+            if (wi === words.length - 1) return;
+            setTimeout(() => { deleting = true; tick(); }, 1800);
+            return;
+          }
+        } else {
+          el.textContent = word.slice(0, --ci);
+          if (ci === 0) {
+            deleting = false;
+            wi = (wi + 1) % words.length;
+            if (wi === words.length - 1) {
+              setTimeout(tick, 400);
+              return;
+            }
+          }
+        }
+        setTimeout(tick, deleting ? 45 : 80);
+      }
+
+      setTimeout(tick, 2200);
+    })();
+  </script>
+</body>
+</html>
